@@ -19,6 +19,8 @@ type command struct {
 	// 子命令
 	child map[string]*command
 
+	Help string
+
 	Action func(flags FlagSet, args []string) error
 }
 
@@ -31,7 +33,7 @@ func NewCommand(name string) *command {
 
 	c := &command{
 		name:  name,
-		flags: make(map[string]*Flag),
+		flags: make(FlagSet),
 		args:  []string{},
 		child: make(map[string]*command),
 	}
@@ -126,12 +128,21 @@ func (c *command) parseArgs(args []string) error {
 
 func (c *command) Run(args []string) error {
 
-	err := c.parseArgs(args)
-	if err != nil {
+	// 如果查找到了子命令
+	child := c.searchChildCmd(args[0])
+	if child != nil {
+
+		return child.Run(args[1:])
+
+	} else {
+		err := c.parseArgs(args)
+		if err != nil {
+			return err
+		}
+		err = c.Action(c.flags, c.args)
 		return err
 	}
-	err = c.Action(c.flags, c.args)
-	return err
+
 }
 
 func (c *command) searchFlag(name string) *Flag {
@@ -147,9 +158,19 @@ func (c *command) Var(name string, val Value, usage string) {
 }
 
 func (c *command) Usage() {
+	fmt.Println(c.Help)
 	for _, flag := range c.flags {
 		fmt.Printf("%-s %-7s %s\n", "-"+flag.name,
 			reflect.TypeOf(flag.value).Elem().Name(),
 			flag.usage)
 	}
+}
+
+func (c *command) AddCommand(name string, child *command) {
+	c.child[name] = child
+}
+
+func (c *command) searchChildCmd(name string) *command {
+
+	return c.child[name]
 }

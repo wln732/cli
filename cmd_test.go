@@ -136,3 +136,41 @@ func TestCommand(t *testing.T) {
 	cmd.Parse([]string{"-h"})
 
 }
+
+func TestChildCmd(t *testing.T) {
+
+	c1 := NewCommand("c1")
+	c2 := NewCommand("c2")
+	c3 := NewCommand("c3")
+
+	c1.AddCommand(c2.name, c2)
+	c2.AddCommand(c3.name, c3)
+
+	var a = new(int64)
+
+	c3.Int64Var(a, "c3a", 0xc3a, "我是c3——a")
+
+	c1.Action = func(flags FlagSet, args []string) error {
+		fmt.Println("我是cmd1")
+		return nil
+	}
+
+	c2.Action = func(flags FlagSet, args []string) error {
+		fmt.Println("我是cmd2")
+		return nil
+	}
+
+	c3.Action = func(flags FlagSet, args []string) error {
+		fmt.Println("我是cmd3")
+		return nil
+	}
+
+	err := c1.Run([]string{
+		"c2", "c3", "-c3a", "100",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("c3a=%d\n", *a)
+}
