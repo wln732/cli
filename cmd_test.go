@@ -170,7 +170,7 @@ func TestChildCmd(t *testing.T) {
 	}
 
 	err := c1.Run([]string{
-		"c2", "c3", "-h", "100",
+		"c2", "-h",
 	})
 
 	if err != nil {
