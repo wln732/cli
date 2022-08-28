@@ -146,6 +146,10 @@ func TestChildCmd(t *testing.T) {
 	c1.AddCommand(c2.name, c2)
 	c2.AddCommand(c3.name, c3)
 
+	c3.Help = `
+	我是c3子命令
+	`
+
 	var a = new(int64)
 
 	c3.Int64Var(a, "c3a", 0xc3a, "我是c3——a")
@@ -166,7 +170,7 @@ func TestChildCmd(t *testing.T) {
 	}
 
 	err := c1.Run([]string{
-		"c2", "c3", "-c3a", "100",
+		"c2", "c3", "-h", "100",
 	})
 
 	if err != nil {
