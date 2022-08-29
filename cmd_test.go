@@ -146,6 +146,10 @@ func TestChildCmd(t *testing.T) {
 	c1.AddCommand(c2.name, c2)
 	c2.AddCommand(c3.name, c3)
 
+	c2.Help = `
+	我是c2子命令
+	`
+
 	c3.Help = `
 	我是c3子命令
 	`
