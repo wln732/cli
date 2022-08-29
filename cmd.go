@@ -67,13 +67,11 @@ func (c *command) parseArgs(args []string) error {
 				flag = c.searchFlag(args[i][1:])
 			}
 
-			if args[i][1:] == "h" {
-				c.Usage()
-				return nil
-			}
-
 			if flag == nil {
 				c.Usage()
+				if args[i][1:] == "h" {
+					return nil
+				}
 				return Eflag未注册
 			}
 
