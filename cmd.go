@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -45,11 +46,6 @@ func NewCommand(name string) *command {
 func (c *command) parseArgs(args []string) error {
 	// cli -a=1 -b 'a' -c 2
 
-	if len(args) < 2 {
-		c.Usage()
-		return nil
-	}
-
 	if args[0][0] != '-' {
 		c.args = append(c.args, args[0])
 		args = args[1:]
@@ -70,7 +66,7 @@ func (c *command) parseArgs(args []string) error {
 			if flag == nil {
 				c.Usage()
 				if args[i][1:] == "h" {
-					return nil
+					return E打印帮助信息
 				}
 				return Eflag未注册
 			}
@@ -135,6 +131,9 @@ func (c *command) Run(args []string) error {
 	} else {
 		err := c.parseArgs(args)
 		if err != nil {
+			if err == E打印帮助信息 {
+				return nil
+			}
 			return err
 		}
 		err = c.Action(c.flags, c.args)
@@ -156,9 +155,19 @@ func (c *command) Var(name string, val Value, usage string) {
 }
 
 func (c *command) Usage() {
+	maxFlagLength := 0
 	fmt.Println(c.Help)
 	for _, flag := range c.flags {
-		fmt.Printf("%-s %-7s %s\n", "-"+flag.name,
+		if len(flag.name) > maxFlagLength {
+			maxFlagLength = len(flag.name)
+		}
+
+	}
+	fmt.Println("len=", maxFlagLength)
+	for _, flag := range c.flags {
+
+		fmt.Printf("%-"+strconv.Itoa(maxFlagLength+4)+"s"+"%-s"+"%s\n", "-"+flag.name,
+
 			reflect.TypeOf(flag.value).Elem().Name(),
 			flag.usage)
 	}

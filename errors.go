@@ -7,6 +7,7 @@ var (
 	E语法错误    = newError("语法错误，请重新输入")
 	E命令未找到   = newError("命令为找到")
 	Eflag未注册 = newError("flag未注册")
+	E打印帮助信息  = newError("打印帮助信息")
 )
 
 func newError(msg string) error {
