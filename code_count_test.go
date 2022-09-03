@@ -166,18 +166,6 @@ func 统计代码行数(t *testing.T, name string) int {
 
 				continue
 			}
-			/*
-				1
-				2
-				3
-				4
-			*/
-
-			/*
-				1
-				2
-				3
-				4*/
 
 			if string(buf[:2]) == "/*" {
 				line_coment = 1

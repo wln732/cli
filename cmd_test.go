@@ -3,45 +3,8 @@ package cli
 import (
 	"flag"
 	"fmt"
-	"html/template"
-	"os"
 	"testing"
 )
-
-func TestGenerateVar(t *testing.T) {
-
-	type T struct {
-		Type  string
-		_type string
-	}
-
-	var data = []T{
-		{"Float32", "float32"},
-		{"Float64", "float64"},
-		{"Bool", "bool"},
-		{"String", "string"},
-		{"Int64", "int64"},
-	}
-
-	temp, err := template.ParseFiles("./int_go.gohtml")
-	if err != nil {
-		t.Fatalf("ParseFiles err:%b\n", err)
-	}
-
-	for i := 0; i < len(data); i++ {
-		f2, err3 := os.Create("./var/" + data[i]._type + ".go")
-		if err3 != nil {
-			t.Fatalf("create err:%v\n", err)
-		}
-		defer f2.Close()
-
-		err = temp.Execute(f2, data[i])
-		if err3 != nil {
-			t.Fatalf("Execute err:%v\n", err)
-		}
-	}
-
-}
 
 func TestNewCommand(t *testing.T) {
 	args := []string{
@@ -119,9 +82,9 @@ func TestNewCommand2(t *testing.T) {
 
 }
 
-func TestCommand(t *testing.T) {
+func TestStdCommand(t *testing.T) {
 
-	cmd := flag.NewFlagSet("echo", flag.PanicOnError)
+	cmd := flag.NewFlagSet("echo", flag.ContinueOnError)
 	var a = new(int64)
 	var b = new(string)
 	var c = new(int)
@@ -145,6 +108,10 @@ func TestChildCmd(t *testing.T) {
 
 	c1.AddCommand(c2.name, c2)
 	c2.AddCommand(c3.name, c3)
+
+	c1.Help = `
+	我是c11111111子命令
+	`
 
 	c2.Help = `
 	我是c2子命令
@@ -174,7 +141,7 @@ func TestChildCmd(t *testing.T) {
 	}
 
 	err := c1.Run([]string{
-		"c2", "-h",
+		"c1", "-h",
 	})
 
 	if err != nil {
