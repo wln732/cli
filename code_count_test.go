@@ -37,10 +37,10 @@ func Test代码统计行数(t *testing.T) {
 	cmd.StringVar(&tt, "exclude-dir111111111111111", "./", "tttttttttttttt")
 
 	cmd.Action = func(flags FlagSet, args []string) error {
-		t.Logf("dir=%s\n", dir)
+		log.Printf("dir=%s\n", dir)
 		fi, err := ioutil.ReadDir(dir)
 		if err != nil {
-			t.Fatalf("readdir err=%v\n", err)
+			log.Fatalf("readdir err=%v\n", err)
 		}
 
 		filenames := make([]string, 0, 16)
@@ -72,7 +72,7 @@ func Test代码统计行数(t *testing.T) {
 
 		var total = 0
 		for i := 0; i < len(cc); i++ {
-			t.Logf("name=%s, code=%d\n", cc[i].name, cc[i].line)
+			log.Printf("name=%s, code=%d\n", cc[i].name, cc[i].line)
 			total += cc[i].line
 		}
 
@@ -88,7 +88,7 @@ func Test代码统计行数(t *testing.T) {
 
 	err := cmd.Run(args)
 	if err != nil {
-		t.Fatalf("err=%v\n", err)
+		log.Fatalf("err=%v\n", err)
 	}
 }
 
@@ -96,14 +96,14 @@ func 获取目录下所有文件名(t *testing.T, dir string) []string {
 	filenames := make([]string, 0, 16)
 	f, err := os.Open(dir)
 	if err != nil {
-		t.Logf("打开目录:%s 错误:%v\n", dir, err)
+		log.Printf("打开目录:%s 错误:%v\n", dir, err)
 		return nil
 	}
 	defer f.Close()
 
 	finfo, err := f.ReadDir(-1)
 	if err != nil {
-		t.Logf("获取目录:%s 错误:%v\n", dir, err)
+		log.Printf("获取目录:%s 错误:%v\n", dir, err)
 		return nil
 	}
 
@@ -138,7 +138,7 @@ func 统计代码行数(t *testing.T, name string) int {
 	}
 	f, err := os.Open(name)
 	if err != nil {
-		t.Logf("打开文件:%s 错误:%v\n", name, err)
+		log.Printf("打开文件:%s 错误:%v\n", name, err)
 	}
 
 	defer f.Close()
@@ -155,7 +155,7 @@ func 统计代码行数(t *testing.T, name string) int {
 			if err == io.EOF {
 				break
 			}
-			t.Logf("打开文件:%s 错误:%v\n", name, err)
+			log.Printf("打开文件:%s 错误:%v\n", name, err)
 		}
 
 		buf = bytes.TrimLeft(buf, "\t")

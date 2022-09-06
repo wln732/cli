@@ -25,7 +25,7 @@ type command struct {
 	Action func(flags FlagSet, args []string) error
 }
 
-func NewDefaultCommand(args []string) *command {
+func NewDefaultCommand() *command {
 
 	return NewCommand(filepath.Base(os.Args[0]))
 }
@@ -163,7 +163,7 @@ func (c *command) Usage() {
 		}
 
 	}
-	fmt.Println("len=", maxFlagLength)
+
 	for _, flag := range c.flags {
 
 		fmt.Printf("%-"+strconv.Itoa(maxFlagLength+4)+"s"+"%-s"+"%s\n", "-"+flag.name,
