@@ -122,6 +122,11 @@ func (c *command) parseArgs(args []string) error {
 
 func (c *command) Run(args []string) error {
 
+	if len(args) == 0 {
+		c.Usage()
+		return nil
+	}
+
 	// 如果查找到了子命令
 	child := c.searchChildCmd(args[0])
 	if child != nil {
@@ -156,17 +161,22 @@ func (c *command) Var(name string, val Value, usage string) {
 
 func (c *command) Usage() {
 	maxFlagLength := 0
+	maxFlagTypeLength := 0
 	fmt.Println(c.Help)
 	for _, flag := range c.flags {
 		if len(flag.name) > maxFlagLength {
 			maxFlagLength = len(flag.name)
 		}
-
+		type_name := reflect.TypeOf(flag.value).Elem().Name()
+		if len(type_name) > maxFlagTypeLength {
+			maxFlagTypeLength = len(type_name)
+		}
 	}
 
 	for _, flag := range c.flags {
 
-		fmt.Printf("%-"+strconv.Itoa(maxFlagLength+4)+"s"+"%-s"+"%s\n", "-"+flag.name,
+		fmt.Printf("%-"+strconv.Itoa(maxFlagLength+4)+"s"+
+			"%-"+strconv.Itoa(maxFlagTypeLength+4)+"s"+"%s\n", "-"+flag.name,
 
 			reflect.TypeOf(flag.value).Elem().Name(),
 			flag.usage)
