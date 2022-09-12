@@ -26,6 +26,10 @@ func (i *Bool) Set(x string) error {
 	return err
 }
 
+func (i *Bool) Get() bool {
+	return (bool(*i))
+}
+
 func (i *Bool) String() string {
 	return strconv.FormatBool(bool(*i))
 }
