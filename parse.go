@@ -12,10 +12,10 @@ type Interface interface {
 }
 
 type TestCommond struct {
-	I    bool   `flag:"i"  usage:"i是个flag"`
-	Dir  string `flag:"dir" usage:"dir是个flag"`
-	Name string `flag:"name" usage:"name是个flag"`
-	N    int    `flag:"n" usage:"n是个flag"`
+	I    bool   `flag:"i-treytrytrytr"  usage:"i是个flag"`
+	Dir  string `flag:"dir-dirdirdirdirdirdir" usage:"dir是个flag"`
+	Name string `flag:"name-namenamenamename" usage:"name是个flag"`
+	N    int    `flag:"n-nnnnxxxxxxxx" usage:"n是个flag"`
 }
 
 func (t *TestCommond) Run(args []Arg) error {

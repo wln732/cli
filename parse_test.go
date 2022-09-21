@@ -22,7 +22,7 @@ func Test_parseStruct(t *testing.T) {
 		return nil
 	}
 
-	err := cmd.Run(strings.Split("test -i -dir ./19_example -name lxq args2 -n 998 args1  args3", " "))
+	err := cmd.Run(strings.Split("test -h", " "))
 
 	if err != nil {
 		t.Fatalf("%v\n", err)

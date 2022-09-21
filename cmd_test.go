@@ -3,7 +3,9 @@ package cli
 import (
 	"flag"
 	"fmt"
+	"os"
 	"testing"
+	"text/tabwriter"
 )
 
 func TestNewCommand(t *testing.T) {
@@ -150,4 +152,15 @@ func TestChildCmd(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("c3a=%d\n", *a)
+}
+
+func Test_command_Usage(t *testing.T) {
+
+	w := new(tabwriter.Writer)
+	// Format in tab-separated columns with a tab stop of 8.
+	w.Init(os.Stdout, 5, 4, 0, '-', 0)
+	fmt.Fprintln(w, "adfd\t你a\t刘锣哥二人\td\t.")
+
+	w.Flush()
+
 }
