@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strconv"
 	"strings"
-	"text/tabwriter"
 )
 
 type command struct {
@@ -166,35 +166,26 @@ func (c *command) Usage() {
 	maxFlagLength := 0
 	maxFlagTypeLength := 0
 
-	w := new(tabwriter.Writer)
-
 	fmt.Println(c.Help)
 	for _, flag := range c.flags {
 		if len(flag.name) > maxFlagLength {
 			maxFlagLength = len(flag.name)
 		}
-		type_name := reflect.TypeOf(flag.value).Elem().Name()
+		type_name := reflect.TypeOf(flag.value).Elem().Kind().String()
 		if len(type_name) > maxFlagTypeLength {
 			maxFlagTypeLength = len(type_name)
 		}
 	}
-	// Format in tab-separated columns with a tab stop of 8.
-	w.Init(os.Stdout, maxFlagTypeLength+4, 4, 4, ' ', 0)
 	fmt.Println("Options:")
 	for _, flag := range c.flags {
-		fmt.Fprintf(w, "  -%s\t%s\t%s\n", flag.name,
+
+		fmt.Printf("  "+"%-"+strconv.Itoa(maxFlagLength+4)+"s"+
+			"%-"+strconv.Itoa(maxFlagTypeLength+4)+"s"+"%s\n", "-"+flag.name,
 
 			reflect.TypeOf(flag.value).Elem().Kind().String(),
 			flag.usage)
-
-		//fmt.Fprintf(w, "%-5s"+"%-"+strconv.Itoa(maxFlagLength+4)+"s"+
-		//	"%-"+strconv.Itoa(maxFlagTypeLength+4)+"s"+"%s\n", "-"+flag.name,
-		//
-		//	reflect.TypeOf(flag.value).Elem().Name(),
-		//	flag.usage)
 	}
 
-	w.Flush()
 }
 
 func (c *command) AddCommand(name string, child *command) {
