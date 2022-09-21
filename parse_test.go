@@ -8,8 +8,8 @@ import (
 
 type TestCommond struct {
 	I    bool   `flag:"i-treytrytrytr"  usage:"i是个flag"`
-	Dir  string `flag:"dir-dirdirdirdirdirdir" usage:"dir是个flag"`
-	Name string `flag:"name-namenamenamename" usage:"name是个flag"`
+	Dir  string `flag:"dir-dir" usage:"dir是个flag"`
+	Name string `flag:"name-namenamenamename" usage:"排除一些目录,例如/user/*, 排除/user目录下所有的文件"`
 	N    int    `flag:"n-nnnnxxxxxxxx" usage:"n是个flag"`
 }
 
