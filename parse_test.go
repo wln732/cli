@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -13,11 +14,9 @@ func Test_parseStruct(t *testing.T) {
 		N:    100,
 	}
 
-	cmd := parseStruct(tc)
+	cmd := parseStruct("test", tc)
 
-	err := cmd.Run([]string{
-		"-h",
-	})
+	err := cmd.Run(strings.Split("test -i -dir ./19_example -name lxq args2 -n 998 args1  args3", " "))
 
 	if err != nil {
 		t.Fatalf("%v\n", err)

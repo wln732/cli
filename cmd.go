@@ -53,6 +53,9 @@ func (c *command) parseArgs(args []string) error {
 
 	for i := 0; i < len(args); i++ {
 		var err error
+		if len(args[i]) == 0 || args[i] == "" {
+			continue
+		}
 		// 说明是个flag
 		if args[i][0] == '-' {
 			var flag *Flag
@@ -134,7 +137,7 @@ func (c *command) Run(args []string) error {
 		return child.Run(args[1:])
 
 	} else {
-		err := c.parseArgs(args)
+		err := c.parseArgs(args[1:])
 		if err != nil {
 			if err == E打印帮助信息 {
 				return nil

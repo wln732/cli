@@ -1,10 +1,6 @@
 package cli
 
-type String string
-
-func StringVar(p *int64, name string, value int64, usage string) *Flag {
-	return NewFlag(name, newInt64Var(value, p), usage)
-}
+type stringVar string
 
 func (c *command) StringVar(p *string, name string, val string, usage string) {
 	c.Var(name, newStringVar(val, p), usage)
@@ -16,20 +12,20 @@ func (c *command) String(name string, val string, usage string) *string {
 	return p
 }
 
-func newStringVar(val string, p *string) *String {
+func newStringVar(val string, p *string) *stringVar {
 	*p = val
-	return (*String)(p)
+	return (*stringVar)(p)
 }
 
-func (i *String) Set(x string) error {
-	*i = ((String)(x))
+func (i *stringVar) Set(x string) error {
+	*i = ((stringVar)(x))
 	return nil
 }
 
-func (i *String) String() string {
+func (i *stringVar) String() string {
 	return string(*i)
 }
 
-func (i *String) Get() string {
+func (i *stringVar) Get() string {
 	return (string(*i))
 }

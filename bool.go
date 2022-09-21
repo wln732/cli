@@ -2,7 +2,7 @@ package cli
 
 import "strconv"
 
-type Bool bool
+type boolVar bool
 
 func (c *command) BoolVar(p *bool, name string, val bool, usage string) {
 	c.Var(name, newBoolVar(val, p), usage)
@@ -14,26 +14,26 @@ func (c *command) Bool(name string, val bool, usage string) *bool {
 	return p
 }
 
-func newBoolVar(val bool, p *bool) *Bool {
+func newBoolVar(val bool, p *bool) *boolVar {
 	*p = val
 
-	return (*Bool)(p)
+	return (*boolVar)(p)
 }
 
-func (i *Bool) Set(x string) error {
+func (i *boolVar) Set(x string) error {
 	i2, err := strconv.ParseBool(x)
-	*i = ((Bool)(i2))
+	*i = ((boolVar)(i2))
 	return err
 }
 
-func (i *Bool) Get() bool {
+func (i *boolVar) Get() bool {
 	return (bool(*i))
 }
 
-func (i *Bool) String() string {
+func (i *boolVar) String() string {
 	return strconv.FormatBool(bool(*i))
 }
 
-func (i *Bool) isBool() bool {
+func (i *boolVar) isBool() bool {
 	return true
 }
