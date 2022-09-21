@@ -25,7 +25,7 @@ func (t *TestCommond) Run(args []string) error {
 }
 
 // 解析结构体
-func parseStruct(i Interface) *command {
+func parseStruct(name string,i any) *command {
 	if i == nil {
 		return nil
 	}
@@ -35,8 +35,7 @@ func parseStruct(i Interface) *command {
 		fmt.Println("必须传入指针类型")
 		return nil
 	}
-	name := val.Elem().Type().Name()
-	name = strings.ToLower(name)
+
 	cmd := NewCommand(name)
 
 	fmt.Println(val.Elem().NumField())
@@ -53,58 +52,49 @@ func parseStruct(i Interface) *command {
 			if tag == "" {
 				tag = strings.ToLower(field.Name)
 			}
-			flag_name := strings.Split(tag, ",")
-			var defaultVal string
-			if len(flag_name) == 2 {
-				defaultVal = flag_name[1]
-			}
 
 			usage := field.Tag.Get("usage")
 
-			switch val.Field(i).Interface().(type) {
+			switch value:=val.Field(i).Interface().(type) {
 			case string:
-				var sVar String
-				sVar.Set(defaultVal)
 
-				cmd.Var(flag_name[0],
+
+				cmd.Var(tag,
 					newStringVar(
-						sVar.String(), (*string)((unsafe.Pointer)(val.Field(i).Addr().Pointer()))),
+						value, UintptrTo[string](val.Field(i).Addr().Pointer())),
 					usage)
 			case int:
-				var intVar Int
-				intVar.Set(defaultVal)
 
-				cmd.Var(flag_name[0],
-					newIntVar(intVar.Get(), (*int)((unsafe.Pointer)(val.Field(i).Addr().Pointer()))), usage)
+				cmd.Var(tag,
+					newIntVar(value, UintptrTo[int](val.Field(i).Addr().Pointer())), usage)
 
 			case int64:
-				var intVar Int64
-				intVar.Set(defaultVal)
+	
 
-				cmd.Var(flag_name[0],
-					newInt64Var(intVar.Get(), (*int64)((unsafe.Pointer)(val.Field(i).Addr().Pointer()))), usage)
+				cmd.Var(tag,
+					newInt64Var(value, UintptrTo[int64](val.Field(i).Addr().Pointer())), usage)
 			case bool:
-				var boolVar Bool
-				boolVar.Set(defaultVal)
-
-				cmd.Var(flag_name[0],
-					newBoolVar(boolVar.Get(), (*bool)((unsafe.Pointer)(val.Field(i).Addr().Pointer()))), usage)
+				
+				cmd.Var(tag,
+					newBoolVar(value, UintptrTo[bool](val.Field(i).Addr().Pointer())), usage)
 
 			case float64:
-				var f64Var Float64
-				f64Var.Set(defaultVal)
+				
 
-				cmd.Var(flag_name[0],
-					newFloat64Var(f64Var.Get(), UintptrTo[float64](val.Field(i).Addr().Pointer())), usage)
+				cmd.Var(tag,
+					newFloat64Var(value, UintptrTo[float64](val.Field(i).Addr().Pointer())), usage)
 
 			}
 		}
 
 	}
 
-	cmd.Action = func(flags FlagSet, args []string) error {
-		return i.Run(args)
+	if iface,ok:=i.(Interface);ok {
+		cmd.Action = func(flags FlagSet, args []string) error {
+			return iface.Run(args)
+		}
 	}
+	
 	return cmd
 }
 

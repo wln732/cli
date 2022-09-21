@@ -25,3 +25,7 @@ func NewFlag(name string, val Value, usage string) *Flag {
 		usage: usage,
 	}
 }
+
+func (f FlagSet) Lookup(name string) *Flag {
+	return f[name]
+}
