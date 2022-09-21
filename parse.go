@@ -8,7 +8,7 @@ import (
 )
 
 type Interface interface {
-	Run(args []string) error
+	Run(args []Arg) error
 }
 
 type TestCommond struct {
@@ -18,7 +18,7 @@ type TestCommond struct {
 	N    int    `flag:"n" usage:"n是个flag"`
 }
 
-func (t *TestCommond) Run(args []string) error {
+func (t *TestCommond) Run(args []Arg) error {
 	fmt.Println("test commond 运行了", args)
 
 	return nil
@@ -87,7 +87,7 @@ func parseStruct(name string, i any) *command {
 	}
 
 	if iface, ok := i.(Interface); ok {
-		cmd.Action = func(args []string) error {
+		cmd.Action = func(args []Arg) error {
 			return iface.Run(args)
 		}
 	}

@@ -16,13 +16,13 @@ type command struct {
 	flags FlagSet
 
 	// 命令的参数
-	args []string
+	args []Arg
 	// 子命令
 	child map[string]*command
 
 	Help string
 
-	Action func(args []string) error
+	Action func(args []Arg) error
 }
 
 func NewDefaultCommand() *command {
@@ -35,7 +35,7 @@ func NewCommand(name string) *command {
 	c := &command{
 		name:  name,
 		flags: make(FlagSet),
-		args:  []string{},
+		args:  []Arg{},
 		child: make(map[string]*command),
 	}
 
@@ -47,7 +47,7 @@ func (c *command) parseArgs(args []string) error {
 	// cli -a=1 -b 'a' -c 2
 
 	if args[0][0] != '-' {
-		c.args = append(c.args, args[0])
+		c.args = append(c.args, Arg(args[0]))
 		args = args[1:]
 	}
 
@@ -112,7 +112,7 @@ func (c *command) parseArgs(args []string) error {
 			}
 
 		} else {
-			c.args = append(c.args, args[i])
+			c.args = append(c.args, Arg(args[i]))
 		}
 
 		if err != nil {
