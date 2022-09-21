@@ -70,7 +70,7 @@ func TestNewCommand2(t *testing.T) {
 	cmd.BoolVar(d, "d", false, "打印d")
 	cmd.Float64Var(e, "e", 123456789.987654321, "打印e")
 
-	cmd.Action = func(flags FlagSet, args []string) error {
+	cmd.Action = func(args []string) error {
 		fmt.Println(args)
 		return nil
 	}
@@ -127,17 +127,17 @@ func TestChildCmd(t *testing.T) {
 	var c1s string
 	c1.StringVar(&c1s, "c1s", "我是cl命令", "cl flag")
 
-	c1.Action = func(flags FlagSet, args []string) error {
+	c1.Action = func(args []string) error {
 		fmt.Println("我是cmd1", c1s)
 		return nil
 	}
 
-	c2.Action = func(flags FlagSet, args []string) error {
+	c2.Action = func(args []string) error {
 		fmt.Println("我是cmd2")
 		return nil
 	}
 
-	c3.Action = func(flags FlagSet, args []string) error {
+	c3.Action = func(args []string) error {
 		fmt.Println("我是cmd3")
 		return nil
 	}
