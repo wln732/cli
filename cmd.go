@@ -175,7 +175,7 @@ func (c *command) Usage() {
 			maxFlagTypeLength = len(type_name)
 		}
 	}
-
+	fmt.Println("Options:")
 	for _, flag := range c.flags {
 
 		fmt.Printf("%-"+strconv.Itoa(maxFlagLength+4)+"s"+
