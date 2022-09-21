@@ -11,19 +11,6 @@ type Interface interface {
 	Run(args []Arg) error
 }
 
-type TestCommond struct {
-	I    bool   `flag:"i-treytrytrytr"  usage:"i是个flag"`
-	Dir  string `flag:"dir-dirdirdirdirdirdir" usage:"dir是个flag"`
-	Name string `flag:"name-namenamenamename" usage:"name是个flag"`
-	N    int    `flag:"n-nnnnxxxxxxxx" usage:"n是个flag"`
-}
-
-func (t *TestCommond) Run(args []Arg) error {
-	fmt.Println("test commond 运行了", args)
-
-	return nil
-}
-
 // 解析结构体
 func parseStruct(name string, i any) *command {
 	if i == nil {
