@@ -17,7 +17,7 @@ func Test_parseStruct(t *testing.T) {
 
 	cmd := parseStruct("test", tc)
 
-	cmd.Action = func(args []string) error {
+	cmd.Action = func(args []Arg) error {
 		fmt.Println("我是新添加的函数")
 		return nil
 	}
