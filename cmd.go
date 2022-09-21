@@ -179,7 +179,7 @@ func (c *command) Usage() {
 		}
 	}
 	// Format in tab-separated columns with a tab stop of 8.
-	w.Init(os.Stdout, maxFlagTypeLength+4, 4, 0, '\t', 0)
+	w.Init(os.Stdout, maxFlagTypeLength+4, 4, 4, ' ', 0)
 	fmt.Println("Options:")
 	for _, flag := range c.flags {
 		fmt.Fprintf(w, "  -%s\t%s\t%s\n", flag.name,
