@@ -22,7 +22,7 @@ type command struct {
 
 	Help string
 
-	Action func(flags FlagSet, args []string) error
+	Action func(args []string) error
 }
 
 func NewDefaultCommand() *command {
@@ -144,7 +144,7 @@ func (c *command) Run(args []string) error {
 			}
 			return err
 		}
-		err = c.Action(c.flags, c.args)
+		err = c.Action(c.args)
 		return err
 	}
 
